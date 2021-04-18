@@ -1,0 +1,38 @@
+#!/usr/bin/python3
+
+
+import requests
+from bs4 import BeautifulSoup as BS
+import os
+s = requests.Session()
+
+a_html = s.get('http://84.201.130.176/skeds/')
+auth_bs = BS(a_html.content, 'html.parser')
+lala = auth_bs.find_all('a', target="_blank")
+assets = []
+for i in lala:
+    lala_ = i.get('href')
+    if '/skeds/' in lala_:
+        assets.append(lala_)
+        # teacher_or_student = input('Кем вы являетесь, преподавателем или учеником? ')
+href = assets[-2]
+url = ['http://tgym.ru' + href]
+
+def get_file(url):
+    response = requests.get(url, stream=True)
+    return response
+def save_data(name, file_data):
+    file = open(name, 'bw')
+    for chunk in file_data.iter_content(4096): 
+        file.write(chunk)
+
+from urllib.parse import unquote
+name1 = unquote(url[0])
+def get_name(url):
+    name = name1.split('/')[-1]
+    name = name.split('?')[0]
+    return name
+for name in url:
+    save_data(get_name(name), get_file(name))
+
+os.system('evince ' + str(get_name(name))) 
