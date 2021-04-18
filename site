@@ -10,11 +10,11 @@ a_html = s.get('http://84.201.130.176/skeds/')
 auth_bs = BS(a_html.content, 'html.parser')
 lala = auth_bs.find_all('a', target="_blank")
 assets = []
+
 for i in lala:
     lala_ = i.get('href')
     if '/skeds/' in lala_:
         assets.append(lala_)
-        # teacher_or_student = input('Кем вы являетесь, преподавателем или учеником? ')
 href = assets[-2]
 url = ['http://tgym.ru' + href]
 
